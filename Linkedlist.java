@@ -1,128 +1,26 @@
 public class Linkedlist {
     Node head, tail;
-    Edge edgeHead = null;
 
-    public void add(String nama, String nim, int jarak) {
-        Node newNode = new Node(nama, nim, jarak);
+    public Linkedlist() {
+        this.head = null;
+        this.tail = null;
+        addLocation("Kampus");
+    }
+
+    public void addLocation(String lokasi) {
+        Node newNode = new Node(lokasi);
         if (head == null) {
             head = tail = newNode;
         } else {
             tail.next = newNode;
-            newNode.prev = tail;
             tail = newNode;
         }
     }
 
-    public void addEdge(String fromNim, String toNim, int weight) {
-        Node fromNode = searchingNim(fromNim);
-        Node toNode = searchingNim(toNim);
-
-        if (fromNode != null && toNode != null) {
-            Edge newEdge = new Edge(fromNode, toNode, weight);
-            if (edgeHead == null) {
-                edgeHead = newEdge;
-            } else {
-                Edge lastEdge = edgeHead;
-                while (lastEdge.nextEdge != null) {
-                    lastEdge = lastEdge.nextEdge;
-                }
-                lastEdge.nextEdge = newEdge;
-            }
-        }
-    }
-
-    public void delete(String nim) {
+    public Node getNode(String lokasi) {
         Node temp = head;
         while (temp != null) {
-            if (temp.nim.equals(nim)) {
-                if (temp == head) {
-                    head = temp.next;
-                    if (head != null)
-                        head.prev = null;
-                } else if (temp == tail) {
-                    tail = temp.prev;
-                    tail.next = null;
-                } else {
-                    temp.prev.next = temp.next;
-                    temp.next.prev = temp.prev;
-                }
-
-                if (edgeHead != null) {
-                    Edge prevEdge = null;
-                    Edge currentEdge = edgeHead;
-                    while (currentEdge != null) {
-                        if (currentEdge.from.nim.equals(nim) || currentEdge.to.nim.equals(nim)) {
-                            if (prevEdge == null) {
-                                edgeHead = currentEdge.nextEdge;
-                            } else {
-                                prevEdge.nextEdge = currentEdge.nextEdge;
-                            }
-                        } else {
-                            prevEdge = currentEdge;
-                        }
-                        currentEdge = currentEdge.nextEdge;
-                    }
-                }
-                System.out.println("\nPenghapusan Data Mahasiswa :");
-                System.out.println("x--------------------------------------------------------------------------------x");
-                System.out.println("| Mahasiswa dengan NIM " + nim + " dihapus karena tidak pernah masuk kuliah tanpa kabar. |");
-                System.out.println("x--------------------------------------------------------------------------------x");
-                return;
-            }
-            temp = temp.next;
-        }
-        System.out.println("Mahasiswa dengan NIM " + nim + " tidak ditemukan.");
-    }
-
-    public void printAll() {
-        if (head == null) {
-            System.out.println("Tidak ada data mahasiswa.");
-            return;
-        }
-
-        System.out.println("+-----------------+------------+------------+");
-        System.out.printf("| %-15s | %-10s | %-10s |\n", "Nama Mahasiswa", "NIM", "Jarak (km)");
-        System.out.println("+-----------------+------------+------------+");
-        Node temp = head;
-        while (temp != null) {
-            System.out.printf("| %-15s | %-10s | %-10d |\n", temp.nama, temp.nim, temp.jarak);
-            temp = temp.next;
-        }
-        System.out.println("+-----------------+------------+------------+");
-    }
-
-    public void sortingJarak() {
-        if (head == null || head.next == null) return;
-
-        boolean swapped;
-        do {
-            swapped = false;
-            Node current = head;
-            while (current.next != null) {
-                if (current.jarak > current.next.jarak) {
-                    String tempName = current.nama;
-                    String tempNim = current.nim;
-                    int tempJarak = current.jarak;
-
-                    current.nama = current.next.nama;
-                    current.nim = current.next.nim;
-                    current.jarak = current.next.jarak;
-
-                    current.next.nama = tempName;
-                    current.next.nim = tempNim;
-                    current.next.jarak = tempJarak;
-
-                    swapped = true;
-                }
-                current = current.next;
-            }
-        } while (swapped);
-    }
-
-    public Node searchingNim(String nim) {
-        Node temp = head;
-        while (temp != null) {
-            if (temp.nim.equals(nim)) {
+            if (temp.lokasi.equals(lokasi)) {
                 return temp;
             }
             temp = temp.next;
@@ -130,23 +28,108 @@ public class Linkedlist {
         return null;
     }
 
-    public void printEdges() {
-        if (edgeHead == null) {
-            System.out.println("Tidak ada edge yang terhubung.");
+    public void addMahasiswaToLocation(String lokasi, String nama, String nim) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            node.mahasiswaQueue.enqueue(nama, nim);
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
+        }
+    }
+
+    public void addEdge(String fromLokasi, String toLokasi, int weight) {
+        Node fromNode = getNode(fromLokasi);
+        Node toNode = getNode(toLokasi);
+
+        if (fromNode != null && toNode != null) {
+            Edge newEdge = new Edge(fromNode, toNode, weight);
+            if (fromNode.edgeList == null) {
+                fromNode.edgeList = newEdge;
+            } else {
+                Edge current = fromNode.edgeList;
+                while (current.nextEdge != null) {
+                    current = current.nextEdge;
+                }
+                current.nextEdge = newEdge;
+            }
+        }
+    }
+
+    public void printGraph() {
+        Node temp = head;
+        while (temp != null) {
+            System.out.println("Lokasi: " + temp.lokasi);
+            System.out.println("Mahasiswa di lokasi:");
+            temp.mahasiswaQueue.printQueue();
+            Edge edge = temp.edgeList;
+            while (edge != null) {
+                System.out.println("  -> " + edge.to.lokasi + " (" + edge.weight + " km)");
+                edge = edge.nextEdge;
+            }
+            temp = temp.next;
+        }
+    }
+
+    public void bfs(String startLokasi) {
+        Node startNode = getNode(startLokasi);
+        if (startNode == null) {
+            System.out.println("Lokasi " + startLokasi + " tidak ditemukan.");
             return;
         }
 
-        Edge tempEdge = edgeHead;
-        System.out.println("+-----------------+------------+------------+");
-        System.out.printf("| %-15s | %-10s | %-10s |\n", "Dari", "Ke", "Jarak (km)");
-        System.out.println("+-----------------+------------+------------+");
-        while (tempEdge != null) {
-            System.out.printf("| %-15s | %-11s| %-11d|\n",
-                    tempEdge.from.nama,
-                    tempEdge.to.nama,
-                    tempEdge.weight);
-            tempEdge = tempEdge.nextEdge;
+        SimpleMap distances = new SimpleMap();
+        SimpleMap predecessors = new SimpleMap();
+        PriorityQueue queue = new PriorityQueue();
+
+        // Initialize distances to infinity, except for the start node
+        Node temp = head;
+        while (temp != null) {
+            distances.put(temp, Integer.MAX_VALUE);  // Set all distances to infinity initially
+            temp = temp.next;
         }
-        System.out.println("+-----------------+-------------+-----------+");
+        distances.put(startNode, 0);  // Distance to start node is 0
+
+        queue.add(startNode, 0);  // Add the start node to the priority queue
+
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+
+            // If we reach the target location ("Kampus"), print the path
+            if (current.lokasi.equals("Kampus")) {
+                System.out.println("Jalur tercepat ke Kampus ditemukan:");
+                printPath(predecessors, current);
+                System.out.println("\nTotal jarak: " + distances.get(current) + " km");
+                return;
+            }
+
+            Edge edge = current.edgeList;
+            while (edge != null) {
+                int newDist = distances.get(current) + edge.weight;  // Calculate new distance for the neighbor
+                if (newDist < distances.get(edge.to)) {
+                    distances.put(edge.to, newDist);  // Update the distance to the neighbor
+
+                    // Only update predecessor if it has not been set yet
+                    if (predecessors.get(edge.to) == Integer.MAX_VALUE) {
+                        predecessors.put(edge.to, current);  // Set the predecessor to the current node
+                    }
+
+                    queue.add(edge.to, newDist);  // Add the neighbor to the queue
+                }
+                edge = edge.nextEdge;
+            }
+        }
+
+        System.out.println("Tidak ada jalur ke Kampus.");
+    }
+
+    private void printPath(SimpleMap predecessors, Node target) {
+        if (predecessors.get(target) == Integer.MAX_VALUE) {
+            System.out.print(target.lokasi);
+            return;
+        }
+        printPath(predecessors, predecessors.get(target));  // Recursively print the path
+        System.out.print(" -> " + target.lokasi);
+    }
+    private void printPath(SimpleMap predecessors, int i) {
     }
 }
