@@ -24,8 +24,64 @@ public class Queue {
         return temp;
     }
 
-    public boolean isEmpty() {
-        return front == null;
+    public Mahasiswa dequeueByNim(String nim) {
+        if (front == null) return null;
+
+        if (front.nim.equals(nim)) {
+            return dequeue();
+        }
+
+        Mahasiswa current = front;
+        Mahasiswa prev = null;
+
+        while (current != null && !current.nim.equals(nim)) {
+            prev = current;
+            current = current.next;
+        }
+
+        if (current == null) {
+            return null;
+        }
+
+        if (prev != null) {
+            prev.next = current.next;
+        }
+
+        if (current == rear) {
+            rear = prev;
+        }
+
+        return current;
+    }
+
+    public Mahasiswa dequeueByNama(String nama) {
+        if (front == null) return null;
+
+        if (front.nama.equals(nama)) {
+            return dequeue();
+        }
+
+        Mahasiswa current = front;
+        Mahasiswa prev = null;
+
+        while (current != null && !current.nama.equals(nama)) {
+            prev = current;
+            current = current.next;
+        }
+
+        if (current == null) {
+            return null;
+        }
+
+        if (prev != null) {
+            prev.next = current.next;
+        }
+
+        if (current == rear) {
+            rear = prev;
+        }
+
+        return current;
     }
 
     public Mahasiswa search(String nim) {

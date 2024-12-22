@@ -59,7 +59,6 @@ public class Linkedlist {
         Node temp = head;
         while (temp != null) {
             System.out.println("Lokasi: " + temp.lokasi);
-            System.out.println("Mahasiswa di lokasi:");
             temp.mahasiswaQueue.printQueue();
             Edge edge = temp.edgeList;
             while (edge != null) {
@@ -67,6 +66,76 @@ public class Linkedlist {
                 edge = edge.nextEdge;
             }
             temp = temp.next;
+        }
+    }
+
+    public void searchMahasiswa(String lokasi, String nim) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            Mahasiswa mahasiswa = node.mahasiswaQueue.search(nim);
+            if (mahasiswa != null) {
+                System.out.println("Mahasiswa ditemukan di lokasi " + lokasi + ":");
+                System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
+            } else {
+                System.out.println("Mahasiswa dengan NIM " + nim + " tidak ditemukan di lokasi " + lokasi + ".");
+            }
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
+        }
+    }
+
+    public void dequeueMahasiswaByNim(String lokasi, String nim) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            Mahasiswa mahasiswa = node.mahasiswaQueue.dequeueByNim(nim);
+            if (mahasiswa != null) {
+                System.out.println("Mahasiswa dengan NIM " + nim + " telah keluar dari antrian di lokasi " + lokasi + ":");
+                System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
+            } else {
+                System.out.println("Mahasiswa dengan NIM " + nim + " tidak ditemukan di antrian lokasi " + lokasi + ".");
+            }
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
+        }
+    }
+
+    public void dequeueMahasiswaByNama(String lokasi, String nama) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            Mahasiswa mahasiswa = node.mahasiswaQueue.dequeueByNama(nama);
+            if (mahasiswa != null) {
+                System.out.println("Mahasiswa dengan nama " + nama + " telah keluar dari antrian di lokasi " + lokasi + ":");
+                System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
+            } else {
+                System.out.println("Mahasiswa dengan nama " + nama + " tidak ditemukan di antrian lokasi " + lokasi + ".");
+            }
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
+        }
+    }
+
+    public void sortMahasiswa(String lokasi) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            node.mahasiswaQueue.sort();
+            System.out.println("Antrian mahasiswa di lokasi " + lokasi + " telah diurutkan berdasarkan NIM.");
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
+        }
+    }
+
+    public void dequeueMahasiswa(String lokasi) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            Mahasiswa mahasiswa = node.mahasiswaQueue.dequeue();
+            if (mahasiswa != null) {
+                System.out.println("Mahasiswa berikut telah keluar dari antrian di lokasi " + lokasi + ":");
+                System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
+            } else {
+                System.out.println("Antrian mahasiswa di lokasi " + lokasi + " kosong.");
+            }
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
         }
     }
 
@@ -81,20 +150,18 @@ public class Linkedlist {
         SimpleMap predecessors = new SimpleMap();
         PriorityQueue queue = new PriorityQueue();
 
-        // Initialize distances to infinity, except for the start node
         Node temp = head;
         while (temp != null) {
-            distances.put(temp, Integer.MAX_VALUE);  // Set all distances to infinity initially
+            distances.put(temp, Integer.MAX_VALUE);
             temp = temp.next;
         }
-        distances.put(startNode, 0);  // Distance to start node is 0
+        distances.put(startNode, 0);
 
-        queue.add(startNode, 0);  // Add the start node to the priority queue
+        queue.add(startNode, 0);
 
         while (!queue.isEmpty()) {
             Node current = queue.poll();
 
-            // If we reach the target location ("Kampus"), print the path
             if (current.lokasi.equals("Kampus")) {
                 System.out.println("Jalur tercepat ke Kampus ditemukan:");
                 printPath(predecessors, current);
@@ -104,16 +171,15 @@ public class Linkedlist {
 
             Edge edge = current.edgeList;
             while (edge != null) {
-                int newDist = distances.get(current) + edge.weight;  // Calculate new distance for the neighbor
+                int newDist = distances.get(current) + edge.weight;
                 if (newDist < distances.get(edge.to)) {
-                    distances.put(edge.to, newDist);  // Update the distance to the neighbor
+                    distances.put(edge.to, newDist);
 
-                    // Only update predecessor if it has not been set yet
                     if (predecessors.get(edge.to) == Integer.MAX_VALUE) {
-                        predecessors.put(edge.to, current);  // Set the predecessor to the current node
+                        predecessors.put(edge.to, current);
                     }
 
-                    queue.add(edge.to, newDist);  // Add the neighbor to the queue
+                    queue.add(edge.to, newDist);
                 }
                 edge = edge.nextEdge;
             }
@@ -125,9 +191,8 @@ public class Linkedlist {
     private void printPath(SimpleMap predecessors, Node target) {
         if (predecessors.get(target) == Integer.MAX_VALUE) {
             System.out.print(target.lokasi);
-            return;
         }
-        printPath(predecessors, predecessors.get(target));  // Recursively print the path
+        printPath(predecessors, predecessors.get(target));
         System.out.print(" -> " + target.lokasi);
     }
     private void printPath(SimpleMap predecessors, int i) {

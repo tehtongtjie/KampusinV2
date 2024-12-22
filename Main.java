@@ -25,6 +25,13 @@ public class Main {
         System.out.println("Graf kampus:");
         kampusin.printGraph();
 
+        //pencarian mahasiswa berdasarkan nim pada lokasi yang ditentukan
+        System.out.println("Pencarian NIM:");
+        kampusin.searchMahasiswa("LabuApi","104");
+
+        System.out.println("Penghapusan Mahasiswa:");
+
+
         // Melakukan BFS dari lokasi tertentu
         System.out.println("\nMelakukan BFS dari 'LabuApi':");
         kampusin.bfs("LabuApi");
