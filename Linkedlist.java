@@ -150,35 +150,36 @@ public class Linkedlist {
         SimpleMap predecessors = new SimpleMap();
         PriorityQueue queue = new PriorityQueue();
 
+        // Inisialisasi jarak dan predecessors
         Node temp = head;
         while (temp != null) {
-            distances.put(temp, Integer.MAX_VALUE);
+            distances.put(temp, new Node(Integer.toString(Integer.MAX_VALUE))); // Menggunakan Node untuk menyimpan jarak
+            predecessors.put(temp, null);
             temp = temp.next;
         }
-        distances.put(startNode, 0);
 
+        distances.put(startNode, new Node("0")); // Jarak ke node awal adalah 0
         queue.add(startNode, 0);
 
         while (!queue.isEmpty()) {
             Node current = queue.poll();
+            int currentDistance = Integer.parseInt(distances.get(current).lokasi);
 
             if (current.lokasi.equals("Kampus")) {
                 System.out.println("Jalur tercepat ke Kampus ditemukan:");
                 printPath(predecessors, current);
-                System.out.println("\nTotal jarak: " + distances.get(current) + " km");
+                System.out.println("\nTotal jarak: " + currentDistance + " km");
                 return;
             }
 
             Edge edge = current.edgeList;
             while (edge != null) {
-                int newDist = distances.get(current) + edge.weight;
-                if (newDist < distances.get(edge.to)) {
-                    distances.put(edge.to, newDist);
+                int newDist = currentDistance + edge.weight;
+                int neighborDistance = Integer.parseInt(distances.get(edge.to).lokasi);
 
-                    if (predecessors.get(edge.to) == Integer.MAX_VALUE) {
-                        predecessors.put(edge.to, current);
-                    }
-
+                if (newDist < neighborDistance) {
+                    distances.put(edge.to, new Node(Integer.toString(newDist)));
+                    predecessors.put(edge.to, current);
                     queue.add(edge.to, newDist);
                 }
                 edge = edge.nextEdge;
@@ -189,12 +190,11 @@ public class Linkedlist {
     }
 
     private void printPath(SimpleMap predecessors, Node target) {
-        if (predecessors.get(target) == Integer.MAX_VALUE) {
-            System.out.print(target.lokasi);
+        Node previous = predecessors.get(target);
+        if (previous != null) {
+            printPath(predecessors, previous);
+            System.out.print(" -> ");
         }
-        printPath(predecessors, predecessors.get(target));
-        System.out.print(" -> " + target.lokasi);
-    }
-    private void printPath(SimpleMap predecessors, int i) {
+        System.out.print(target.lokasi);
     }
 }

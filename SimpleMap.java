@@ -1,26 +1,23 @@
 public class SimpleMap {
     private SimpleEntry head;
 
-    public void put(Node to, Node current) {
-    }
-
     private class SimpleEntry {
         Node key;
-        int value;
+        Node value; // Ubah tipe dari int menjadi Node
         SimpleEntry next;
 
-        public SimpleEntry(Node key, int value) {
+        public SimpleEntry(Node key, Node value) {
             this.key = key;
             this.value = value;
             this.next = null;
         }
     }
 
-    public void put(Node key, int value) {
+    public void put(Node key, Node value) {
         SimpleEntry current = head;
         while (current != null) {
-            if (current.key == key) {
-                current.value = value;
+            if (current.key.lokasi.equals(key.lokasi)) { // Gunakan .equals untuk membandingkan key
+                current.value = value; // Update jika key sudah ada
                 return;
             }
             current = current.next;
@@ -30,7 +27,7 @@ public class SimpleMap {
         head = newEntry;
     }
 
-    public int get(Node key) {
+    public Node get(Node key) {
         SimpleEntry current = head;
         while (current != null) {
             if (current.key == key) {
@@ -38,6 +35,6 @@ public class SimpleMap {
             }
             current = current.next;
         }
-        return Integer.MAX_VALUE;
+        return null; // Return null jika key tidak ditemukan
     }
 }

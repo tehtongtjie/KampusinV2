@@ -123,6 +123,7 @@ public class Queue {
                 }
             }
         } while (swapped);
+        printQueue();
     }
 
     public void printQueue() {
