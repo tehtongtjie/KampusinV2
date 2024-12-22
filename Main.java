@@ -2,7 +2,7 @@ public class Main {
     public static void main(String[] args) {
         Linkedlist kampusin = new Linkedlist();
 
-        // Set lokasi
+        // Set lokasi awal
         kampusin.addLocation("Gomong");
         kampusin.addLocation("Kekalik");
         kampusin.addLocation("LabuApi");
@@ -31,6 +31,8 @@ public class Main {
             System.out.println("5. Cari Mahasiswa di Lokasi");
             System.out.println("6. Keluarkan Mahasiswa dari Antrian");
             System.out.println("7. Jalur Tercepat ke Kampus (BFS)");
+            System.out.println("8. Urutkan Mahasiswa di Lokasi");
+            System.out.println("9. Keluarkan Mahasiswa Pertama di Lokasi");
             System.out.println("0. Keluar");
             System.out.print("Pilih opsi: ");
 
@@ -89,6 +91,18 @@ public class Main {
                     System.out.print("Masukkan lokasi awal: ");
                     String startLokasi = readLine();
                     kampusin.bfs(startLokasi);
+                    break;
+
+                case 8: // Urutkan Mahasiswa di Lokasi
+                    System.out.print("Masukkan nama lokasi: ");
+                    String lokasiSort = readLine();
+                    kampusin.sortMahasiswa(lokasiSort);
+                    break;
+
+                case 9: // Keluarkan Mahasiswa Pertama di Lokasi
+                    System.out.print("Masukkan nama lokasi: ");
+                    String lokasiDequeue = readLine();
+                    kampusin.dequeueMahasiswa(lokasiDequeue);
                     break;
 
                 case 0: // Keluar
