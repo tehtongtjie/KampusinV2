@@ -42,7 +42,6 @@ public class Main {
 
         int pilihan;
         do {
-            System.out.println("\033[2j\033[H");
             System.out.println("\nMenu:");
             System.out.println("1. Tambah Lokasi");
             System.out.println("2. Tambah Mahasiswa ke Lokasi");
@@ -60,7 +59,6 @@ public class Main {
 
             switch (pilihan) {
                 case 1: // Tambah Lokasi
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan nama lokasi: ");
                     String lokasiBaru = readLine();
                     kampusin.addLocation(lokasiBaru);
@@ -68,7 +66,6 @@ public class Main {
                     break;
 
                 case 2: // Tambah Mahasiswa ke Lokasi
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan nama lokasi: ");
                     String lokasi = readLine();
                     System.out.print("Masukkan nama mahasiswa: ");
@@ -79,7 +76,6 @@ public class Main {
                     break;
 
                 case 3: // Tambah Edge antar Lokasi
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan lokasi asal: ");
                     String fromLokasi = readLine();
                     System.out.print("Masukkan lokasi tujuan: ");
@@ -91,12 +87,10 @@ public class Main {
                     break;
 
                 case 4: // Cetak Graph
-                    System.out.println("\033[2j\033[H");
                     kampusin.printGraph();
                     break;
 
                 case 5: // Cari Mahasiswa di Lokasi
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan nama lokasi: ");
                     String lokasiCari = readLine();
                     System.out.print("Masukkan NIM mahasiswa: ");
@@ -105,7 +99,6 @@ public class Main {
                     break;
 
                 case 6: // Keluarkan Mahasiswa dari Antrian
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan nama lokasi: ");
                     String lokasiKeluar = readLine();
                     System.out.print("Masukkan NIM mahasiswa: ");
@@ -114,33 +107,28 @@ public class Main {
                     break;
 
                 case 7: // Jalur Tercepat ke Kampus (BFS)
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan lokasi awal: ");
                     String startLokasi = readLine();
                     kampusin.bfs(startLokasi);
                     break;
 
                 case 8: // Urutkan Mahasiswa di Lokasi
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan nama lokasi: ");
                     String lokasiSort = readLine();
                     kampusin.sortMahasiswa(lokasiSort);
                     break;
 
                 case 9: // Keluarkan Mahasiswa Pertama di Lokasi
-                    System.out.println("\033[2j\033[H");
                     System.out.print("Masukkan nama lokasi: ");
                     String lokasiDequeue = readLine();
                     kampusin.dequeueMahasiswa(lokasiDequeue);
                     break;
 
                 case 0: // Keluar
-                    System.out.println("\033[2j\033[H");
                     System.out.println("Keluar dari program.");
                     break;
 
                 default:
-                    System.out.println("\033[2j\033[H");
                     System.out.println("Pilihan tidak valid.");
             }
         } while (pilihan != 0);

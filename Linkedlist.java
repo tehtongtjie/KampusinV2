@@ -28,33 +28,6 @@ public class Linkedlist {
         return null;
     }
 
-    public void addMahasiswaToLocation(String lokasi, String nama, String nim) {
-        Node node = getNode(lokasi);
-        if (node != null) {
-            node.mahasiswaQueue.enqueue(nama, nim);
-        } else {
-            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
-        }
-    }
-
-    public void addEdge(String fromLokasi, String toLokasi, int weight) {
-        Node fromNode = getNode(fromLokasi);
-        Node toNode = getNode(toLokasi);
-
-        if (fromNode != null && toNode != null) {
-            Edge newEdge = new Edge(fromNode, toNode, weight);
-            if (fromNode.edgeList == null) {
-                fromNode.edgeList = newEdge;
-            } else {
-                Edge current = fromNode.edgeList;
-                while (current.nextEdge != null) {
-                    current = current.nextEdge;
-                }
-                current.nextEdge = newEdge;
-            }
-        }
-    }
-
     public void printGraph() {
         Node temp = head;
         while (temp != null) {
@@ -69,15 +42,24 @@ public class Linkedlist {
         }
     }
 
-    public void searchMahasiswa(String lokasi, String nim) {
+    public void addMahasiswaToLocation(String lokasi, String nama, String nim) {
         Node node = getNode(lokasi);
         if (node != null) {
-            Mahasiswa mahasiswa = node.mahasiswaQueue.search(nim);
+            node.mahasiswaQueue.enqueue(nama, nim);
+        } else {
+            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
+        }
+    }
+
+    public void dequeueMahasiswa(String lokasi) {
+        Node node = getNode(lokasi);
+        if (node != null) {
+            Mahasiswa mahasiswa = node.mahasiswaQueue.dequeue();
             if (mahasiswa != null) {
-                System.out.println("Mahasiswa ditemukan di lokasi " + lokasi + ":");
+                System.out.println("Mahasiswa berikut telah keluar dari antrian di lokasi " + lokasi + ":");
                 System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
             } else {
-                System.out.println("Mahasiswa dengan NIM " + nim + " tidak ditemukan di lokasi " + lokasi + ".");
+                System.out.println("Antrian mahasiswa di lokasi " + lokasi + " kosong.");
             }
         } else {
             System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
@@ -99,15 +81,15 @@ public class Linkedlist {
         }
     }
 
-    public void dequeueMahasiswaByNama(String lokasi, String nama) {
+    public void searchMahasiswa(String lokasi, String nim) {
         Node node = getNode(lokasi);
         if (node != null) {
-            Mahasiswa mahasiswa = node.mahasiswaQueue.dequeueByNama(nama);
+            Mahasiswa mahasiswa = node.mahasiswaQueue.search(nim);
             if (mahasiswa != null) {
-                System.out.println("Mahasiswa dengan nama " + nama + " telah keluar dari antrian di lokasi " + lokasi + ":");
+                System.out.println("Mahasiswa ditemukan di lokasi " + lokasi + ":");
                 System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
             } else {
-                System.out.println("Mahasiswa dengan nama " + nama + " tidak ditemukan di antrian lokasi " + lokasi + ".");
+                System.out.println("Mahasiswa dengan NIM " + nim + " tidak ditemukan di lokasi " + lokasi + ".");
             }
         } else {
             System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
@@ -124,18 +106,21 @@ public class Linkedlist {
         }
     }
 
-    public void dequeueMahasiswa(String lokasi) {
-        Node node = getNode(lokasi);
-        if (node != null) {
-            Mahasiswa mahasiswa = node.mahasiswaQueue.dequeue();
-            if (mahasiswa != null) {
-                System.out.println("Mahasiswa berikut telah keluar dari antrian di lokasi " + lokasi + ":");
-                System.out.println("Nama: " + mahasiswa.nama + ", NIM: " + mahasiswa.nim);
+    public void addEdge(String fromLokasi, String toLokasi, int weight) {
+        Node fromNode = getNode(fromLokasi);
+        Node toNode = getNode(toLokasi);
+
+        if (fromNode != null && toNode != null) {
+            Edge newEdge = new Edge(fromNode, toNode, weight);
+            if (fromNode.edgeList == null) {
+                fromNode.edgeList = newEdge;
             } else {
-                System.out.println("Antrian mahasiswa di lokasi " + lokasi + " kosong.");
+                Edge current = fromNode.edgeList;
+                while (current.nextEdge != null) {
+                    current = current.nextEdge;
+                }
+                current.nextEdge = newEdge;
             }
-        } else {
-            System.out.println("Lokasi " + lokasi + " tidak ditemukan.");
         }
     }
 

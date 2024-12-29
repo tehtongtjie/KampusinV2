@@ -3,7 +3,7 @@ public class SimpleMap {
 
     private class SimpleEntry {
         Node key;
-        Node value; // Ubah tipe dari int menjadi Node
+        Node value;
         SimpleEntry next;
 
         public SimpleEntry(Node key, Node value) {
@@ -16,8 +16,8 @@ public class SimpleMap {
     public void put(Node key, Node value) {
         SimpleEntry current = head;
         while (current != null) {
-            if (current.key.lokasi.equals(key.lokasi)) { // Gunakan .equals untuk membandingkan key
-                current.value = value; // Update jika key sudah ada
+            if (current.key.lokasi.equals(key.lokasi)) {
+                current.value = value;
                 return;
             }
             current = current.next;
@@ -35,6 +35,6 @@ public class SimpleMap {
             }
             current = current.next;
         }
-        return null; // Return null jika key tidak ditemukan
+        return null;
     }
 }
